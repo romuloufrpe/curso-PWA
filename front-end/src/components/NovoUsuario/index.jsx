@@ -1,13 +1,40 @@
 import React from 'react';
 import Label from '../Label';
 import Input from '../Input';
+import GenderSelector from '../GenderSelector';
 
 class NovoUsuario extends React.Component {
+    atualizarNome (e){
+        let usuario = this.state.usuario;
+        usuario.nome = e.target.value;
+        this.setState({
+            usuario : {
+                nome: e.target.value
+            }
+        });
+    }
+
+    atualizarGenero(e,genero) {
+        e.preventDefault();
+        let usuario = this.state.usuario;
+        usuario.genero = genero;
+        this.setState({
+        usuario: usuario
+        });
+    }
     constructor(props) {
         super(props);
         this.state = {
-        nomeInvalido: true
-       };
+            usuario: {
+               nome: '',
+               genero: ''
+            },
+            validacao: {
+                nomeInvalido: false,
+                generoInvalido: false
+            }
+        
+        };
     }
         
     render() {
@@ -17,15 +44,26 @@ class NovoUsuario extends React.Component {
                     <Label 
                         htmlFor="nome"
                         texto="Quem é você?"
-                        valorInvalido={this.state.nomeInvalido}
+                        valorInvalido={this.state.validacao.nomeInvalido}
                     />
                     <Input 
                         id="nome"
                         placeholder="Digite seu nome"
                         maxLength="40"
                         readOnly={false}
-                        valorInvalido={this.state.nomeInvalido}
-                        defaultValue="Romulo"
+                        valorInvalido={this.state.validacao.nomeInvalido}
+                        defaultValue={this.state.usuario.nome}
+                        onChange={this.atualizarNome.bind(this)}
+                    />
+                    <Label
+                        texto = "Seu gênero:"
+                        valorInvalido={this.state.validacao.generoInvalido}
+                    />
+
+                    <GenderSelector 
+                        valorInvalido = {this.state.validacao.generoInvalido}
+                        genero={this.state.usuario.genero}
+                        atualizarGenero={this.atualizarGenero.bind(this)}
                     />
                 </form>
             </div>
